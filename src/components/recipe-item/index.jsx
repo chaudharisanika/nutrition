@@ -7,7 +7,7 @@ export default function RecipeItem({ item }) {
         <img src={item?.image_url} alt="recipe item" className="block w-full" />
       </div>
       <div>
-        <span className="text-sm text-cyan-700 font-medium">
+        <span className="text-sm text-grey-700 font-medium">
           {item?.publisher}
         </span>
         <h3 className="font-bold text-2xl truncate text-black">

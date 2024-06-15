@@ -12,6 +12,7 @@ export default function Details() {
   
   const [nutritionData, setNutritionData] = useState(null);
 
+
   useEffect(() => {
     async function getRecipeDetails() {
       const response = await fetch(
@@ -48,10 +49,17 @@ export default function Details() {
 
   const totalCalories = nutritionData?.items.reduce((total, item) => total + item.calories, 0) || 0;
   const totalServingSize = nutritionData?.items.reduce((total, item) => total + item.serving_size_g, 0) || 0;
+  const totalFat = nutritionData?.items.reduce((total, item) => total + item.fat_total_g, 0) || 0;
+  const totalProtein = nutritionData?.items.reduce((total, item) => total + item.protein_g, 0) || 0;
+  const totalCarbohydrates = nutritionData?.items.reduce((total, item) => total + item.carbohydrates_total_g, 0) || 0;
+  const totalSugar = nutritionData?.items.reduce((total, item) => total + item.sugar_g, 0) || 0;
+
+  const isHealthy = totalCalories <= 2000 & totalFat<=100 & totalProtein<=60 & totalCarbohydrates<=300 & totalSugar<=100;
+
 
   return (
-    <div className="container mx-auto py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
-      <div className="row-start-2 lg:row-start-auto">
+    <div className="flex flex-col justify-center items-center">
+      <div className="row-start-2 lg:row-start-auto ">
         <div className="h-96 overflow-hidden rounded-xl group">
           <img
             src={recipeDetailsData?.recipe?.image_url}
@@ -60,13 +68,15 @@ export default function Details() {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-3">
-        <span className="text-sm text-cyan-700 font-medium">
-          {recipeDetailsData?.recipe?.publisher}
-        </span>
-        <h3 className="font-bold text-2xl truncate text-black">
+      <div className="flex flex-col gap-3 flex-1 mt-5">
+        <h3 className="font-bold text-4xl truncate text-black text-center font-serif">
           {recipeDetailsData?.recipe?.title}
         </h3>
+        <div className="mt-5 text-center">
+              <span className={`text-3xl  font-bold font-serif ${isHealthy ? 'text-green-500' : 'text-red-500'}`}>
+                {isHealthy ? 'This recipe is healthy to eat' : 'This recipe is not healthy to eat'}
+              </span>
+            </div>
         {nutritionData && (
           <div>
             <span className="text-2xl font-semibold text-black">
@@ -75,9 +85,13 @@ export default function Details() {
             <table className="table-auto w-full mt-5">
               <thead>
                 <tr>
-                  <th className="px-4 py-2">Name</th>
+                  <th className="px-4 py-2">Ingredients</th>
                   <th className="px-4 py-2">Calories</th>
                   <th className="px-4 py-2">Serving Size (g)</th>
+                  <th className="px-4 py-2">Fat (g)</th>
+                  <th className="px-4 py-2">Protein (g)</th>
+                  <th className="px-4 py-2">Carbohydrates (g)</th>
+                  <th className="px-4 py-2">Sugar (g)</th>
                 </tr>
               </thead>
               <tbody>
@@ -86,12 +100,20 @@ export default function Details() {
                     <td className="border px-4 py-2">{item.name}</td>
                     <td className="border px-4 py-2">{item.calories}</td>
                     <td className="border px-4 py-2">{item.serving_size_g}</td>
+                    <td className="border px-4 py-2">{item.fat_total_g}</td>
+                    <td className="border px-4 py-2">{item.protein_g}</td>
+                    <td className="border px-4 py-2">{item.carbohydrates_total_g}</td>
+                    <td className="border px-4 py-2">{item.sugar_g}</td>
                   </tr>
                 ))}
                 <tr>
-                  <td className="border px-4 py-2 font-bold">Total</td>
-                  <td className="border px-4 py-2 font-bold">{totalCalories}</td>
-                  <td className="border px-4 py-2 font-bold">{totalServingSize}</td>
+                <td className="border px-4 py-2 font-bold">Total</td>
+              <td className="border px-4 py-2 font-bold">{totalCalories}</td>
+              <td className="border px-4 py-2 font-bold">{totalServingSize}</td>
+              <td className="border px-4 py-2 font-bold">{totalFat}</td>
+              <td className="border px-4 py-2 font-bold">{totalProtein}</td>
+              <td className="border px-4 py-2 font-bold">{totalCarbohydrates}</td>
+              <td className="border px-4 py-2 font-bold">{totalSugar}</td>
                 </tr>
               </tbody>
             </table>
